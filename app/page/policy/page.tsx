@@ -2,12 +2,9 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await supabase.from('setting_site').select('name, favicon').limit(1).single()
   return {
-    title: `Policy & Terms | ${data?.name || 'MovieDB'}`,
-    icons: {
-      icon: data?.favicon || '/favicon.ico',
-    }
+    title: `Policy & Terms`,
+    description: "Our Terms of Service and user compliance policy for using our video streaming and API services.",
   }
 }
 

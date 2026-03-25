@@ -2,12 +2,9 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await supabase.from('setting_site').select('name, favicon').limit(1).single()
   return {
-    title: `About Us | ${data?.name || 'MovieDB'}`,
-    icons: {
-      icon: data?.favicon || '/favicon.ico',
-    }
+    title: `About Us`,
+    description: "Learn more about our mission to provide high-quality video streaming and a powerful REST API for developers.",
   }
 }
 
