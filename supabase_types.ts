@@ -1,3 +1,16 @@
-Need to install the following packages:
-supabase@2.84.1
-Ok to proceed? (y) 
+// This file will be populated with Supabase generated types later.
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      [key: string]: any
+    }
+  }
+}
