@@ -55,6 +55,7 @@ export default function LandingNavbar() {
         <div className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-widest text-zinc-400">
           <a href="/#features" className="hover:text-white transition-colors">{lang === 'ID' ? 'Fitur' : 'Features'}</a>
           <a href="/#api" className="hover:text-white transition-colors">API</a>
+          <Link href="/page/donation" className="hover:text-white transition-colors">{t('donation')}</Link>
           <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800">
             <button 
               onClick={() => setLang('ID')}
