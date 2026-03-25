@@ -1,0 +1,2 @@
+ALTER TABLE public.server_1 
+ADD COLUMN view_count BIGINT DEFAULT 0;

@@ -1,0 +1,22 @@
+-- SQL Schema for Server_1 table in Supabase/PostgreSQL
+
+CREATE TABLE public.server_1 (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_folder TEXT NULL,
+  id_name_folder TEXT NULL,
+  file_name TEXT NOT NULL,
+  file_size BIGINT NOT NULL, -- Dalam bytes
+  file_link TEXT NOT NULL,
+  file_created_at TIMESTAMPTZ NULL, -- Waktu pembuatan file di server asal
+  file_download BIGINT DEFAULT 0 NOT NULL, -- Jumlah download
+  file_linkid TEXT NULL, -- ID unik link/identifier file
+  file_convert TEXT NULL, -- Status convert atau link file hasil convert
+  create_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  update_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- Trigger to automatically update update_at on changes
+CREATE TRIGGER update_server_1_updated_at
+    BEFORE UPDATE ON public.server_1
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_updated_at_column();

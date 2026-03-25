@@ -1,0 +1,17 @@
+-- SQL Schema for api_server table in Supabase/PostgreSQL
+
+CREATE TYPE server_type AS ENUM ('Streamtape', 'Doodstream');
+
+CREATE TABLE public.api_server (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  type server_type NOT NULL,
+  api_config JSONB NOT NULL DEFAULT '{}'::jsonb, -- Simpan API key, dsb di sini
+  create_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  update_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- Trigger to automatically update update_at on changes
+CREATE TRIGGER update_api_server_updated_at
+    BEFORE UPDATE ON public.api_server
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_updated_at_column();
