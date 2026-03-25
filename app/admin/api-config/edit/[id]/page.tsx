@@ -189,7 +189,7 @@ export default function EditApiConfig() {
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-amber-500/50 outline-none text-zinc-200"
                         placeholder="Masukkan Doodstream API Key"
                         value={doodKey}
-                        onChange={(e) => doodKey(e.target.value)}
+                        onChange={(e) => setDoodKey(e.target.value)}
                       />
                     </div>
                  </div>
