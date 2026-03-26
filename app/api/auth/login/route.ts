@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     // Set cookie untuk level akses (Sangat disarankan memakai JWT untuk produksi)
     response.cookies.set('user_level', user.level, {
       path: '/',
-      httpOnly: true,
+      httpOnly: false, // Diperlukan agar client-side JS (Navbar) bisa mendeteksi login
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 // 1 day

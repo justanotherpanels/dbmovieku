@@ -21,14 +21,29 @@ export default function Navbar() {
   const { lang, setLang, t } = useLanguage()
   const [siteData, setSiteData] = useState({ name: 'MovieDB', logo: '' })
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
+    const checkUser = () => {
+       const cookies = document.cookie.split('; ')
+       const level = cookies.find(r => r.startsWith('user_level='))?.split('=')[1]
+       if (level?.toLowerCase() === 'admin') setIsAdmin(true)
+    }
+    checkUser()
+
     const fetchSiteData = async () => {
       const { data } = await supabase.from('setting_site').select('name, logo').limit(1).single()
       if (data) setSiteData({ name: data.name, logo: data.logo })
     }
     fetchSiteData()
   }, [])
+
+  const handleLogout = async () => {
+    // Clear cookies
+    document.cookie = 'user_level=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+    document.cookie = 'user_id=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+    window.location.href = '/'
+  }
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-800/50">
@@ -73,19 +88,28 @@ export default function Navbar() {
               </button>
            </div>
 
+           {isAdmin && (
+             <Link href="/admin" className="hidden lg:flex items-center gap-2 p-1 px-4 bg-emerald-600/10 border border-emerald-500/20 rounded-full hover:bg-emerald-600/20 transition-all mr-2">
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.2em] italic">Dashboard</span>
+             </Link>
+           )}
+
            <Link href="/member/profile" className="p-2.5 text-zinc-300 hover:bg-zinc-800 rounded-full transition-all group/prof">
              <User className={`w-5 h-5 ${pathname === '/member/profile' ? 'text-indigo-500' : 'group-hover/prof:text-indigo-400'}`} />
            </Link>
            
            <div className="h-8 w-[1px] bg-zinc-800 mx-2 hidden sm:block"></div>
            
-           <Link href="/auth/login" className="flex items-center gap-2 group p-1 pr-4 bg-zinc-900 border border-zinc-800 rounded-full hover:border-indigo-500/50 transition-all">
-              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-indigo-600/30">
-                M
+           <button 
+             onClick={handleLogout}
+             className="flex items-center gap-2 group p-1 pr-4 bg-zinc-900 border border-zinc-800 rounded-full hover:border-indigo-500/50 transition-all text-left"
+           >
+              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-black italic text-white shadow-lg shadow-indigo-600/30 uppercase">
+                {isAdmin ? 'A' : 'M'}
               </div>
-              <span className="text-xs font-bold text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest ml-1">Member</span>
+              <span className="text-xs font-bold text-zinc-400 group-hover:text-white transition-colors uppercase tracking-widest ml-1">{isAdmin ? 'Admin' : 'Member'}</span>
               <LogOut className="w-4 h-4 text-zinc-600 group-hover:text-rose-400 transition-colors ml-2" />
-           </Link>
+           </button>
 
            {/* Mobile Menu Toggle */}
            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 text-zinc-300">
@@ -102,8 +126,14 @@ export default function Navbar() {
            <Link href="/member/rest-api" className="block text-zinc-200 font-bold hover:text-indigo-400" onClick={() => setIsMenuOpen(false)}>API</Link>
            <Link href="/member/donation" className="block text-zinc-200 font-bold hover:text-indigo-400" onClick={() => setIsMenuOpen(false)}>{t('donation')}</Link>
            <div className="pt-4 border-t border-zinc-900 flex flex-col gap-4">
-              <button className="flex items-center gap-2 text-sm text-zinc-500 hover:text-rose-400">
-                <LogOut className="w-4 h-4" /> Keluar
+              {isAdmin && (
+                <Link href="/admin" className="block text-emerald-500 font-bold hover:underline" onClick={() => setIsMenuOpen(false)}>Admin Dashboard</Link>
+              )}
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-sm text-zinc-500 hover:text-rose-400 w-full text-left"
+              >
+                <LogOut className="w-4 h-4" /> {t('logout')}
               </button>
            </div>
         </div>

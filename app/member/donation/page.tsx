@@ -62,9 +62,9 @@ export default function DonationPage() {
                <Heart className="w-8 h-8 text-rose-500 fill-current" />
             </div>
             <div className="text-center md:text-left space-y-2">
-               <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic italic line-height-none">Support Our Projects</h1>
+               <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic line-height-none">{t('donation_title')}</h1>
                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest max-w-xl">
-                 Bantu operasional server kami tetap stabil dengan berdonasi melalui metode di bawah ini.
+                 {t('donation_subtitle')}
                </p>
             </div>
          </div>
@@ -79,7 +79,7 @@ export default function DonationPage() {
          ) : methods.length === 0 ? (
             <div className="col-span-full py-16 text-center bg-zinc-900 border border-zinc-800 rounded-[32px]">
                <ShieldCheck className="w-12 h-12 text-zinc-800 mx-auto mb-4" />
-               <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px]">Belum ada metode donasi aktif.</p>
+               <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px]">{t('no_donation_methods')}</p>
             </div>
          ) : (
             methods.map((method) => (
@@ -101,7 +101,7 @@ export default function DonationPage() {
 
                   {/* Content per Type */}
                   <div className="flex-1 space-y-6">
-                     <h3 className="text-xl font-black text-white italic tracking-tight">{method.type} Method</h3>
+                     <h3 className="text-xl font-black text-white italic tracking-tight">{method.type} {t('payment_method')}</h3>
                      
                      {method.type === 'Qris' && (
                         <div className="space-y-4">
@@ -147,7 +147,7 @@ export default function DonationPage() {
                            )}
                            <div className="p-4 bg-zinc-950 border border-zinc-800 rounded-2xl space-y-2">
                               <div className="flex items-center gap-2 text-[9px] font-black text-zinc-600 uppercase tracking-widest">
-                                 <Wallet className="w-3 h-3" /> Address
+                                 <Wallet className="w-3 h-3" /> {t('address')}
                               </div>
                               <div className="flex items-center justify-between py-1">
                                  <p className="text-[10px] font-mono text-orange-400 break-all leading-relaxed flex-1 pr-4 italic">
@@ -173,7 +173,7 @@ export default function DonationPage() {
                     }}
                     className="mt-8 w-full h-10 flex items-center justify-center gap-2 bg-zinc-950 border border-zinc-800 rounded-xl hover:bg-zinc-800 text-zinc-500 hover:text-white transition-all font-black uppercase text-[9px] tracking-widest"
                   >
-                     Copy Details <Copy className="w-3 h-3" />
+                     {t('copy_details')} <Copy className="w-3 h-3" />
                   </button>
                </div>
             ))

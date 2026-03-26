@@ -7,11 +7,13 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="flex h-screen bg-black text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden">
       <Toaster richColors position="top-right" />
-      <Sidebar />
-      <main className="flex-1 w-full bg-zinc-950/50 backdrop-blur-3xl overflow-y-auto">
-        <header className="h-20 border-b border-zinc-800 flex items-center justify-between px-10 bg-black/30 sticky top-0 backdrop-blur-md z-10 transition-all duration-300">
+      <div className="h-full overflow-y-auto">
+        <Sidebar />
+      </div>
+      <main className="flex-1 h-full bg-zinc-950/50 backdrop-blur-3xl overflow-y-auto relative">
+        <header className="h-20 border-b border-zinc-800 flex items-center justify-between px-10 bg-black/30 sticky top-0 backdrop-blur-md z-[40] transition-all duration-300">
           <div className="flex flex-col">
             <h2 className="text-xl font-bold text-white tracking-tight">Admin Dashboard</h2>
             <p className="text-zinc-500 text-xs font-medium">Panel Pengelola Konten & User</p>

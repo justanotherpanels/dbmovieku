@@ -74,7 +74,7 @@ export default function LandingNavbar() {
 
         {isLoggedIn ? (
           <Link 
-            href={userLevel === 'admin' ? '/admin' : '/member'} 
+            href={userLevel?.toLowerCase() === 'admin' ? '/admin' : '/member'} 
             className="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all active:scale-95 shadow-xl shadow-indigo-600/20"
           >
             Dashboard

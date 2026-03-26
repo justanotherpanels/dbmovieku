@@ -34,6 +34,10 @@ export default function DoodstreamManagement() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [syncing, setSyncing] = useState(false)
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   useEffect(() => {
     fetchFiles()
@@ -98,6 +102,17 @@ export default function DoodstreamManagement() {
   const filtered = files.filter(file => 
     file.title?.toLowerCase().includes(search.toLowerCase()) ||
     file.file_code?.toLowerCase().includes(search.toLowerCase())
+  )
+
+  // Reset to first page when search changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [search])
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage)
+  const paginatedFiles = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   )
 
   return (
@@ -168,14 +183,14 @@ export default function DoodstreamManagement() {
                     <td colSpan={5} className="px-6 py-8"><div className="h-4 bg-zinc-800 rounded w-full"></div></td>
                   </tr>
                 ))
-              ) : filtered.length === 0 ? (
+              ) : paginatedFiles.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 font-medium italic">
                     Belum ada data Doodstream ditemukan.
                   </td>
                 </tr>
               ) : (
-                filtered.map((file) => (
+                paginatedFiles.map((file) => (
                   <tr key={file.id} className="hover:bg-zinc-800/20 transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
@@ -241,6 +256,55 @@ export default function DoodstreamManagement() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {!loading && totalPages > 1 && (
+          <div className="bg-zinc-950/50 border-t border-zinc-800 px-6 py-5 flex items-center justify-between">
+            <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
+              Menampilkan {Math.min(filtered.length, (currentPage - 1) * itemsPerPage + 1)} - {Math.min(filtered.length, currentPage * itemsPerPage)} dari {filtered.length} Data
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl font-bold text-xs text-zinc-400 hover:text-white hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                Prev
+              </button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
+                  .map((p, i, arr) => (
+                    <div key={p} className="flex items-center">
+                      {i > 0 && arr[i-1] !== p - 1 && (
+                        <span className="text-zinc-600 px-1">...</span>
+                      )}
+                      <button
+                        onClick={() => setCurrentPage(p)}
+                        className={`w-10 h-10 rounded-xl text-xs font-bold transition-all border ${
+                          currentPage === p
+                            ? 'bg-orange-600 border-orange-500 text-white shadow-lg shadow-orange-600/20'
+                            : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white'
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    </div>
+                  ))
+                }
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-xl font-bold text-xs text-zinc-400 hover:text-white hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

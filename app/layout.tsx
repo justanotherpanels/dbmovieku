@@ -30,6 +30,22 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: iconUrl,
       apple: data?.logo || iconUrl,
     },
+    openGraph: {
+      title: siteName,
+      description: "Experience premium video streaming and fast downloads.",
+      images: [
+        {
+          url: '/image/db.png',
+          width: 1200,
+          height: 630,
+          alt: siteName,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: ['/image/db.png'],
+    },
   };
 }
 
