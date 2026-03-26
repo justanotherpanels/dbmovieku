@@ -36,6 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/context/LanguageContext";
 import SiteLayout from "@/components/layout/SiteLayout";
+import { PHProvider } from "@/components/PostHogProvider";
+import PostHogPageview from "@/components/PostHogPageview";
+import { WebVitals } from "@/components/PostHogWebVitals";
 
 export default function RootLayout({
   children,
@@ -48,12 +51,16 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LanguageProvider>
-          <Toaster richColors position="top-right" />
-          <SiteLayout>
-            {children}
-          </SiteLayout>
-        </LanguageProvider>
+        <PHProvider>
+          <PostHogPageview />
+          <WebVitals />
+          <LanguageProvider>
+            <Toaster richColors position="top-right" />
+            <SiteLayout>
+              {children}
+            </SiteLayout>
+          </LanguageProvider>
+        </PHProvider>
       </body>
     </html>
   );
