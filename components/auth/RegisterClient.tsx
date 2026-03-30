@@ -39,6 +39,26 @@ export default function RegisterClient() {
     e.preventDefault()
     setLoading(true)
 
+    // Validasi email: gmail, yahoo, outlook saja
+    const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com']
+    const emailParts = email.split('@')
+    const domain = emailParts[1]?.toLowerCase()
+    const prefix = emailParts[0]
+
+    if (!allowedDomains.includes(domain)) {
+      toast.error(lang === 'ID' ? 'Hanya email Gmail, Yahoo, dan Outlook yang diperbolehkan' : 'Only Gmail, Yahoo, and Outlook are allowed')
+      setLoading(false)
+      return
+    }
+
+    // Validasi titik: tidak boleh > 1 di prefix
+    const dotCount = (prefix.match(/\./g) || []).length
+    if (dotCount > 1) {
+      toast.error(lang === 'ID' ? 'Format email tidak valid (terlalu banyak titik)' : 'Invalid email format (too many dots)')
+      setLoading(false)
+      return
+    }
+
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',

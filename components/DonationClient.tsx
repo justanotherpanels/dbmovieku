@@ -10,7 +10,9 @@ import {
   Wallet,
   Mail,
   Copy,
-  Check
+  Check,
+  Coins,
+  Network
 } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 import { toast } from 'sonner'
@@ -153,6 +155,25 @@ export default function DonationClient() {
 
                   {item.type === 'Crypto' && (
                     <div className="space-y-6">
+                      <div className="flex gap-4">
+                        {item.detail_donation?.name && (
+                          <div className="flex-1 bg-zinc-950 border border-zinc-800 p-4 rounded-2xl space-y-1">
+                            <p className="text-[8px] text-zinc-500 uppercase font-black tracking-widest flex items-center gap-1.5">
+                              <Coins className="w-3 h-3" /> {lang === 'ID' ? 'Nama Crypto' : 'Crypto Name'}
+                            </p>
+                            <p className="text-sm font-black text-white italic tracking-tight">{item.detail_donation.name}</p>
+                          </div>
+                        )}
+                        {item.detail_donation?.network && (
+                          <div className="flex-1 bg-zinc-950 border border-zinc-800 p-4 rounded-2xl space-y-1">
+                            <p className="text-[8px] text-zinc-500 uppercase font-black tracking-widest flex items-center gap-1.5">
+                              <Network className="w-3 h-3" /> {lang === 'ID' ? 'Jaringan' : 'Network'}
+                            </p>
+                            <p className="text-sm font-black text-indigo-400 italic tracking-tight">{item.detail_donation.network}</p>
+                          </div>
+                        )}
+                      </div>
+
                       {item.detail_donation?.image_url && (
                         <div className="aspect-square bg-zinc-950 border border-zinc-800 p-4 rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
                           <img 

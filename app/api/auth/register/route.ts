@@ -11,6 +11,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Input tidak lengkap' }, { status: 400 })
     }
 
+    // Server-side email validation
+    const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com']
+    const emailParts = email.split('@')
+    const domain = emailParts[1]?.toLowerCase()
+    const prefix = emailParts[0]
+
+    if (!allowedDomains.includes(domain)) {
+      return NextResponse.json({ message: 'Domain email tidak diperbolehkan. Gunakan Gmail, Yahoo, atau Outlook.' }, { status: 400 })
+    }
+
+    const dotCount = (prefix.match(/\./g) || []).length
+    if (dotCount > 1) {
+      return NextResponse.json({ message: 'Format email tidak valid (terlalu banyak titik).' }, { status: 400 })
+    }
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
     

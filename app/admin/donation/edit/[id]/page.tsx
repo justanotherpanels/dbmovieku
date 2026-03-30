@@ -12,7 +12,9 @@ import {
   CreditCard,
   Link as LinkIcon,
   Mail,
-  Wallet
+  Wallet,
+  Coins,
+  Network
 } from 'lucide-react'
 import { toast, Toaster } from 'sonner'
 import Link from 'next/link'
@@ -30,6 +32,8 @@ export default function EditDonation() {
   const [paypalEmail, setPaypalEmail] = useState('')
   const [cryptoUrl, setCryptoUrl] = useState('')
   const [cryptoAddress, setCryptoAddress] = useState('')
+  const [cryptoName, setCryptoName] = useState('')
+  const [cryptoNetwork, setCryptoNetwork] = useState('')
 
   useEffect(() => {
     if (params.id) {
@@ -59,6 +63,8 @@ export default function EditDonation() {
        } else if (data.type === 'Crypto') {
          setCryptoUrl(details.image_url || '')
          setCryptoAddress(details.address || '')
+         setCryptoName(details.name || '')
+         setCryptoNetwork(details.network || '')
        }
     }
     setLoading(false)
@@ -74,7 +80,7 @@ export default function EditDonation() {
     } else if (type === 'Paypal') {
       detailObj = { email: paypalEmail }
     } else if (type === 'Crypto') {
-      detailObj = { image_url: cryptoUrl, address: cryptoAddress }
+      detailObj = { image_url: cryptoUrl, address: cryptoAddress, name: cryptoName, network: cryptoNetwork }
     }
 
     const { error } = await supabase
@@ -193,6 +199,34 @@ export default function EditDonation() {
 
            {type === 'Crypto' && (
               <div className="space-y-6">
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                          <Coins className="w-3 h-3" /> Nama Crypto
+                       </label>
+                       <input 
+                         type="text"
+                         required
+                         placeholder="cth: Bitcoin, USDT, ETH"
+                         value={cryptoName}
+                         onChange={(e) => setCryptoName(e.target.value)}
+                         className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-4 px-6 text-sm text-white outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                       />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                          <Network className="w-3 h-3" /> Nama Jaringan
+                       </label>
+                       <input 
+                         type="text"
+                         required
+                         placeholder="cth: BEP-20, ERC-20, TRC-20"
+                         value={cryptoNetwork}
+                         onChange={(e) => setCryptoNetwork(e.target.value)}
+                         className="w-full bg-zinc-950 border border-zinc-800 rounded-2xl py-4 px-6 text-sm text-white outline-none focus:ring-1 focus:ring-indigo-500 transition-all"
+                       />
+                    </div>
+                 </div>
                  <div className="space-y-2">
                     <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                        <LinkIcon className="w-3 h-3" /> Update URL Gambar Crypto

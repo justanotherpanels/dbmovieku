@@ -10,7 +10,9 @@ import {
   Copy,
   Mail,
   Wallet,
-  ShieldCheck
+  ShieldCheck,
+  Coins,
+  Network
 } from 'lucide-react'
 import { toast, Toaster } from 'sonner'
 import { useLanguage } from '@/context/LanguageContext'
@@ -136,6 +138,28 @@ export default function DonationPage() {
 
                      {method.type === 'Crypto' && (
                         <div className="space-y-4">
+                           <div className="flex gap-3">
+                              {method.detail_donation.name && (
+                                 <div className="flex-1 p-3 bg-zinc-950 border border-zinc-800 rounded-2xl space-y-1">
+                                    <div className="flex items-center gap-2 text-[8px] font-black text-zinc-600 uppercase tracking-widest">
+                                       <Coins className="w-2.5 h-2.5" /> {t('crypto_name')}
+                                    </div>
+                                    <div className="text-[10px] font-bold text-white uppercase italic tracking-tight">
+                                       {method.detail_donation.name}
+                                    </div>
+                                 </div>
+                              )}
+                              {method.detail_donation.network && (
+                                 <div className="flex-1 p-3 bg-zinc-950 border border-zinc-800 rounded-2xl space-y-1">
+                                    <div className="flex items-center gap-2 text-[8px] font-black text-zinc-600 uppercase tracking-widest">
+                                       <Network className="w-2.5 h-2.5" /> {t('network')}
+                                    </div>
+                                    <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">
+                                       {method.detail_donation.network}
+                                    </div>
+                                 </div>
+                              )}
+                           </div>
                            {method.detail_donation.image_url && (
                              <div className="aspect-square bg-white p-3 rounded-2xl overflow-hidden shadow-inner">
                                 <img 
