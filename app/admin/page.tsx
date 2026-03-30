@@ -20,11 +20,6 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({
-    doodstream: 0,
-    streamtape: 0,
-    users: 0
-  })
   const [trending, setTrending] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -32,19 +27,6 @@ export default function AdminDashboard() {
     const fetchDashboardData = async () => {
       setLoading(true)
       try {
-        // Fetch Counts
-        const [doodRes, tapeRes, userRes] = await Promise.all([
-          supabase.from('server_2').select('*', { count: 'exact', head: true }),
-          supabase.from('server_1').select('*', { count: 'exact', head: true }),
-          supabase.from('users').select('*', { count: 'exact', head: true })
-        ])
-
-        setStats({
-          doodstream: doodRes.count || 0,
-          streamtape: tapeRes.count || 0,
-          users: userRes.count || 0
-        })
-
         // Fetch Trending (Top 5 Mixed)
         const [doodTrending, tapeTrending] = await Promise.all([
           supabase.from('server_2').select('title, view_count, file_code').order('view_count', { ascending: false }).limit(5),
@@ -82,12 +64,6 @@ export default function AdminDashboard() {
     fetchDashboardData()
   }, [])
 
-  const statCards = [
-    { name: 'Total Doodstream', value: stats.doodstream.toLocaleString('id-ID'), icon: MonitorPlay, color: 'text-orange-400', bg: 'bg-orange-400/10', change: 'Files' },
-    { name: 'Total Streamtape', value: stats.streamtape.toLocaleString('id-ID'), icon: Video, color: 'text-blue-400', bg: 'bg-blue-400/10', change: 'Files' },
-    { name: 'Total Registered Users', value: stats.users.toLocaleString('id-ID'), icon: Users, color: 'text-emerald-400', bg: 'bg-emerald-400/10', change: 'Users' }
-  ]
-
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-700">
       {/* Welcome Section */}
@@ -102,31 +78,6 @@ export default function AdminDashboard() {
             <TrendingUp className="w-40 h-40 text-indigo-500 stroke-[1px]" />
           </div>
         </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {loading ? (
-             Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-32 bg-zinc-900 border border-zinc-800 rounded-2xl animate-pulse"></div>
-             ))
-        ) : (
-          statCards.map((stat) => (
-            <div key={stat.name} className="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl hover:border-indigo-500/50 transition-all duration-500 group cursor-default shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <stat.icon className="w-20 h-20" />
-              </div>
-              <div className="flex items-center justify-between mb-6">
-                <div className={`${stat.bg} ${stat.color} p-4 rounded-2xl ring-1 ring-white/5`}>
-                  <stat.icon className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest border border-zinc-800 px-3 py-1 rounded-full">{stat.change}</span>
-              </div>
-              <p className="text-zinc-500 text-xs font-black uppercase tracking-widest mb-2">{stat.name}</p>
-              <p className="text-4xl font-black text-white tracking-tighter italic leading-none group-hover:text-indigo-400 transition-colors duration-300">{stat.value}</p>
-            </div>
-          ))
-        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
